@@ -13,6 +13,7 @@ const prompts = require('prompts');
 const YAML = require('yaml');
 const { list } = require('prompts/dist/prompts');
 const fs = require('fs');
+const os = require("os");
 
 const input = cli.input;
 const flags = cli.flags;
@@ -21,6 +22,7 @@ const { clear, debug } = flags;
 (async () => {
 	init({ clear });
 	input.includes(`help`) && cli.showHelp(0);
+
 
 	const questions = [
 		{
@@ -108,7 +110,7 @@ const { clear, debug } = flags;
 			type: 'text',
 			name: 'folder',
 			message: 'Which folder do you want to put this workflow in?',
-			initial: '~/.warp/workflows'
+			initial: `${os.homedir()}/.warp/workflows/`
 		},
 		{
 			type: 'text',
@@ -123,7 +125,8 @@ const { clear, debug } = flags;
 	console.log(yaml);
 
 	await fs.writeFile(
-		`${fileResponse.folder}/${fileResponse.fileName}.yaml`,
+		`${fileResponse.folder}${fileResponse.fileName}.yaml`,
+		// 'test.yaml',
 		yaml,
 		function (err) {
 			if (err) throw err;
